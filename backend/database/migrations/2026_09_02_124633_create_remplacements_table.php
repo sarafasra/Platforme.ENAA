@@ -6,20 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('remplacements', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('demande_conge_id')
+                ->unique()
+                ->constrained('demandes_conges')
+                ->cascadeOnDelete();
+
+            $table->string('nom');
+            $table->date('date_debut');
+            $table->date('date_fin');
+
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('remplacements');
