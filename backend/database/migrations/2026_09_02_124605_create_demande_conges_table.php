@@ -6,22 +6,31 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('demande_conges', function (Blueprint $table) {
+        Schema::create('demandes_conges', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->cascadeOnDelete();
+
+            $table->foreignId('type_conge_id')
+                ->constrained('type_conges')
+                ->cascadeOnDelete();
+
+            $table->date('date_debut');
+            $table->date('date_fin');
+            $table->string('type_journee');
+            $table->text('motif')->nullable();
+            $table->string('statut')->default('en_attente');
+
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('demande_conges');
+        Schema::dropIfExists('demandes_conges');
     }
 };
