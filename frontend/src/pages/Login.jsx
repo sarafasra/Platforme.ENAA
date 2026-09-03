@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function Login() {
@@ -13,7 +13,6 @@ function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         setError("");
         setLoading(true);
 
@@ -21,15 +20,11 @@ function Login() {
             await login(email, password);
             navigate("/dashboard");
         } catch (error) {
-    console.log("ERREUR LOGIN :", error);
-    console.log("RESPONSE :", error.response);
-
-    if (error.response?.data?.message) {
-        setError(error.response.data.message);
-    } else {
-        setError("Une erreur est survenue.");
-    }
-} finally {
+            setError(
+                error.response?.data?.message ||
+                "Une erreur est survenue."
+            );
+        } finally {
             setLoading(false);
         }
     };
@@ -46,6 +41,7 @@ function Login() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="Votre email"
+                        autoComplete="email"
                         required
                     />
                 </div>
@@ -57,6 +53,7 @@ function Login() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Votre mot de passe"
+                        autoComplete="current-password"
                         required
                     />
                 </div>
@@ -67,6 +64,11 @@ function Login() {
                     {loading ? "Connexion..." : "Se connecter"}
                 </button>
             </form>
+
+            <p>
+                Vous n'avez pas de compte ?
+                <Link to="/register"> S'inscrire</Link>
+            </p>
         </div>
     );
 }

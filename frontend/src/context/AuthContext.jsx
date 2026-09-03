@@ -10,7 +10,6 @@ export function AuthProvider({ children }) {
     );
     const [loading, setLoading] = useState(true);
 
-    // Récupérer l'utilisateur connecté
     const getUser = async (authToken = token) => {
         if (!authToken) {
             setLoading(false);
@@ -34,7 +33,6 @@ export function AuthProvider({ children }) {
         }
     };
 
-    // Login
     const login = async (email, password) => {
         const response = await api.post("/login", {
             email,
@@ -50,7 +48,6 @@ export function AuthProvider({ children }) {
         return response.data;
     };
 
-    // Register
     const register = async (
         name,
         email,
@@ -75,9 +72,9 @@ export function AuthProvider({ children }) {
         return response.data;
     };
 
-    // Logout
-    const logout = async () => {
-        try {
+  const logout = async () => {
+    try {
+        if (token) {
             await api.post(
                 "/logout",
                 {},
@@ -87,12 +84,15 @@ export function AuthProvider({ children }) {
                     },
                 }
             );
-        } finally {
-            localStorage.removeItem("token");
-            setToken(null);
-            setUser(null);
         }
-    };
+    } catch (error) {
+        console.log("Logout error:", error.response?.data);
+    } finally {
+        localStorage.removeItem("token");
+        setToken(null);
+        setUser(null);
+    }
+};
 
     useEffect(() => {
         getUser();
