@@ -73,12 +73,20 @@ class TypeCongeController extends Controller
     ]);
 }
 
-    public function destroy(TypeConge $typeConge)
-    {
-        $typeConge->delete();
+   public function destroy($id)
+{
+    $typeConge = TypeConge::find($id);
 
+    if (!$typeConge) {
         return response()->json([
-            'message' => 'Type de congé supprimé avec succès',
-        ]);
+            'message' => 'Type de congé introuvable'
+        ], 404);
     }
+
+    $typeConge->delete();
+
+    return response()->json([
+        'message' => 'Type de congé supprimé avec succès'
+    ], 200);
+}
 }

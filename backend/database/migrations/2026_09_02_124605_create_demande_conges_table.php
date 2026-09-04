@@ -9,24 +9,29 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('demandes_conges', function (Blueprint $table) {
-            $table->id();
+    $table->id();
 
-            $table->foreignId('user_id')
-                ->constrained('users')
-                ->cascadeOnDelete();
+    $table->foreignId('user_id')
+        ->constrained('users')
+        ->cascadeOnDelete();
 
-            $table->foreignId('type_conge_id')
-                ->constrained('type_conges')
-                ->cascadeOnDelete();
+    $table->foreignId('type_conge_id')
+        ->constrained('type_conges')
+        ->cascadeOnDelete();
 
-            $table->date('date_debut');
-            $table->date('date_fin');
-            $table->string('type_journee');
-            $table->text('motif')->nullable();
-            $table->string('statut')->default('en_attente');
+    $table->date('date_debut');
+    $table->date('date_fin');
+    $table->string('type_journee'); // 'entiere', 'matin', 'apres_midi'
+    $table->text('motif')->nullable();
+    $table->string('piece_jointe')->nullable(); // 🟢 للـ PDF والـ Images (الشهادة الطبية)
+    
+    // 🟢 حالات الـ Workflow الثلاثة من الـ Brief
+    $table->string('statut')->default('pending_manager'); // pending_manager -> pending_hr -> approved / rejected
+    $table->text('motif_refus')->nullable();
 
-            $table->timestamps();
-        });
+    $table->timestamps();
+});
+        
     }
 
     public function down(): void

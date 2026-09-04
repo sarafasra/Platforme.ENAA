@@ -5,25 +5,19 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
-    const [token, setToken] = useState(
-        localStorage.getItem("token")
-    );
+    const [token, setToken] = useState(localStorage.getItem("token"));
     const [loading, setLoading] = useState(true);
 
-    const getUser = async (authToken = token) => {
-        if (!authToken) {
+    const getUser = async () => {
+        const storedToken = localStorage.getItem("token");
+        if (!storedToken) {
             setLoading(false);
             return;
         }
 
         try {
-            const response = await api.get("/user", {
-                headers: {
-                    Authorization: `Bearer ${authToken}`,
-                },
-            });
-
-            setUser(response.data.user);
+            const response = await api.get("/user");
+            setUser(response.data.user || response.data);
         } catch (error) {
             localStorage.removeItem("token");
             setToken(null);
@@ -33,20 +27,22 @@ export function AuthProvider({ children }) {
         }
     };
 
-    const login = async (email, password) => {
-        const response = await api.post("/login", {
-            email,
-            password,
-        });
+const login = async (email, password) => {
+    const response = await api.post("/login", {
+        email,
+        password,
+    });
 
-        const newToken = response.data.token;
+    const newToken = response.data.token;
+    const loggedUser = response.data.user;
 
-        localStorage.setItem("token", newToken);
-        setToken(newToken);
-        setUser(response.data.user);
+    localStorage.setItem("token", newToken);
 
-        return response.data;
-    };
+    setToken(newToken);
+    setUser(loggedUser);
+
+    return loggedUser;
+};
 
     const register = async (
         name,
@@ -72,27 +68,19 @@ export function AuthProvider({ children }) {
         return response.data;
     };
 
-  const logout = async () => {
-    try {
-        if (token) {
-            await api.post(
-                "/logout",
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+    const logout = async () => {
+        try {
+            if (localStorage.getItem("token")) {
+                await api.post("/logout");
+            }
+        } catch (error) {
+            console.log("Logout error:", error.response?.data);
+        } finally {
+            localStorage.removeItem("token");
+            setToken(null);
+            setUser(null);
         }
-    } catch (error) {
-        console.log("Logout error:", error.response?.data);
-    } finally {
-        localStorage.removeItem("token");
-        setToken(null);
-        setUser(null);
-    }
-};
+    };
 
     useEffect(() => {
         getUser();

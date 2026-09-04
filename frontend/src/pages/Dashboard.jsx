@@ -15,7 +15,8 @@ function Dashboard() {
         const getTypesConges = async () => {
             try {
                 const response = await api.get("/types-conges");
-                setTypesConges(response.data);
+                const data = Array.isArray(response.data) ? response.data : response.data.data || [];
+                setTypesConges(data);
             } catch (error) {
                 console.error("Erreur:", error);
             } finally {
@@ -31,10 +32,11 @@ function Dashboard() {
         navigate("/login");
     };
 
+    const isAdminOrHR = user?.role === "admin" || user?.role === "rh" || user?.role === "manager";
+
     return (
         <div className="dashboard">
 
-            {/* Sidebar */}
             <aside className="sidebar">
                 <div className="logo">
                     <div className="logo-icon">E</div>
@@ -45,42 +47,53 @@ function Dashboard() {
                 </div>
 
                 <nav className="menu">
-                    <button className="menu-item active">
+                    <button className="menu-item active" onClick={() => navigate("/dashboard")}>
                         <span>⌂</span>
                         Dashboard
                     </button>
 
-                    <button className="menu-item">
-                        <span></span>
-                        Mes congés
+                    {!isAdminOrHR && (
+                        <>
+                            <button className="menu-item" onClick={() => navigate("/mes-demandes")}>
+                                 Mes demandes
+                            </button>
+
+                            <button className="menu-item" onClick={() => navigate("/nouvelle-demande")}>
+                                 Nouvelle demande
+                            </button>
+
+                            <button className="menu-item" onClick={() => navigate("/mon-solde")}>
+                                 Mon solde
+                            </button>
+                        </>
+                    )}
+
+                    <button className="menu-item" onClick={() => navigate("/types-conges")}>
+                         Types de congés
                     </button>
 
-                    <button className="menu-item">
-                        Types de congés
-                    </button>
-
-                    <button className="menu-item">
-                        <span></span>
-                        Mon solde
-                    </button>
+                    {isAdminOrHR && (
+                        <button className="menu-item" onClick={() => navigate("/mes-demandes")}>
+                             Valider demandes
+                        </button>
+                    )}
                 </nav>
 
                 <div className="sidebar-bottom">
                     <button className="logout-btn" onClick={handleLogout}>
-                        <span></span>
-                        Déconnexion
+                         Déconnexion
                     </button>
                 </div>
             </aside>
 
-            {/* Main */}
+            {/* Main Content */}
             <main className="main-content">
 
                 {/* Header */}
                 <header className="topbar">
                     <div>
                         <p className="welcome-small">Espace personnel</p>
-                        <h1>Bonjour, {user?.name} </h1>
+                        <h1>Bonjour, {user?.name}</h1>
                     </div>
 
                     <div className="profile">
@@ -109,20 +122,17 @@ function Dashboard() {
                         </h2>
 
                         <p>
-                            Consultez vos informations et suivez
-                            facilement vos congés.
+                            Consultez vos informations et suivez facilement vos demandes de congés.
                         </p>
                     </div>
 
-                    <div className="welcome-icon">
-                        
-                    </div>
+                    <div className="welcome-icon"></div>
                 </section>
 
                 {/* Statistics */}
                 <section className="stats-grid">
 
-                    <div className="stat-card">
+                    <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => navigate("/types-conges")}>
                         <div className="stat-icon"></div>
                         <div>
                             <span>Types de congés</span>
@@ -130,10 +140,10 @@ function Dashboard() {
                         </div>
                     </div>
 
-                    <div className="stat-card">
+                    <div className="stat-card" style={{ cursor: "pointer" }} onClick={() => navigate("/mes-demandes")}>
                         <div className="stat-icon"></div>
                         <div>
-                            <span>Demandes</span>
+                            <span>Mes Demandes</span>
                             <strong>0</strong>
                         </div>
                     </div>
@@ -156,7 +166,6 @@ function Dashboard() {
 
                 </section>
 
-                {/* Content */}
                 <section className="content-section">
 
                     <div className="section-header">
@@ -165,7 +174,7 @@ function Dashboard() {
                             <p>Les types de congés disponibles</p>
                         </div>
 
-                        <button className="view-btn">
+                        <button className="view-btn" onClick={() => navigate("/types-conges")}>
                             Voir tout →
                         </button>
                     </div>
@@ -179,23 +188,18 @@ function Dashboard() {
                         <div className="empty-state">
                             <div className="empty-icon"></div>
                             <h3>Aucun type de congé</h3>
-                            <p>
-                                Aucun type de congé n'est disponible pour le moment.
-                            </p>
+                            <p>Aucun type de congé n'est disponible pour le moment.</p>
                         </div>
                     ) : (
                         <div className="leave-grid">
                             {typesConges.map((type) => (
-                                <div className="leave-card" key={type.id}>
-                                    <div className="leave-icon">
-                                        
-                                    </div>
+                                <div className="leave-card" key={type.id} onClick={() => navigate("/types-conges")} style={{ cursor: "pointer" }}>
+                                    <div className="leave-icon"></div>
 
                                     <div>
                                         <h3>{type.nom}</h3>
                                         <p>
-                                            {type.description ||
-                                                "Aucune description disponible."}
+                                            {type.description || "Aucune description disponible."}
                                         </p>
                                     </div>
 
@@ -209,7 +213,6 @@ function Dashboard() {
 
                 </section>
 
-                {/* User information */}
                 <section className="account-card">
                     <div className="account-avatar">
                         {user?.name?.charAt(0).toUpperCase()}

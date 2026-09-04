@@ -12,23 +12,31 @@ function Login() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError("");
-        setLoading(true);
+   const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
-        try {
-            await login(email, password);
+    try {
+        const loggedUser = await login(email, password);
+
+        if (loggedUser.role === "admin") {
+            navigate("/admin");
+        } else if (loggedUser.role === "employe") {
             navigate("/dashboard");
-        } catch (error) {
-            setError(
-                error.response?.data?.message ||
-                "Une erreur est survenue."
-            );
-        } finally {
-            setLoading(false);
+        } else {
+            navigate("/dashboard");
         }
-    };
+
+    } catch (error) {
+        setError(
+            error.response?.data?.message ||
+            "Une erreur est survenue."
+        );
+    } finally {
+        setLoading(false);
+    }
+};
 
     return (
         <div className="login-page">

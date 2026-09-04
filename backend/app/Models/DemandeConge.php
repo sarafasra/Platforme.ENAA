@@ -9,6 +9,8 @@ class DemandeConge extends Model
 {
     use HasFactory;
 
+    protected $table = 'demandes_conges';
+
     protected $fillable = [
         'user_id',
         'type_conge_id',
@@ -16,7 +18,9 @@ class DemandeConge extends Model
         'date_fin',
         'type_journee',
         'motif',
+        'piece_jointe',
         'statut',
+        'motif_refus',
     ];
 
     protected function casts(): array
