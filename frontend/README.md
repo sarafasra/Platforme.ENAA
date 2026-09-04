@@ -1,16 +1,139 @@
-# React + Vite
+# ENAA Leave
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+## 📌 Présentation du projet
 
-Currently, two official plugins are available:
+**ENAA Leave** est une plateforme web de gestion des congés destinée à simplifier la gestion des demandes de congé au sein de l'ENAA.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+L'application permet aux employés de consulter les types de congés disponibles, leur solde, créer des demandes de congé et suivre leur statut.
 
-## React Compiler
+Les administrateurs peuvent gérer les types de congés, les soldes et les demandes des employés.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the Oxlint configuration
+## 🎯 Objectifs du projet
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+L'objectif principal de **ENAA Leave** est de digitaliser et simplifier la gestion des congés.
+
+La plateforme permet de :
+
+- Centraliser les informations liées aux congés.
+- Faciliter la création des demandes.
+- Permettre le suivi des demandes.
+- Consulter les soldes de congés.
+- Gérer les différents types de congés.
+- Faciliter le travail des administrateurs et responsables.
+
+---
+
+## 👥 Utilisateurs
+
+### 👤 Employé
+
+L'employé peut :
+
+- Créer un compte.
+- Se connecter à son espace personnel.
+- Consulter les types de congés.
+- Consulter son solde de congé.
+- Créer une demande de congé.
+- Ajouter un justificatif.
+- Consulter ses demandes.
+- Suivre le statut de ses demandes.
+
+### 👨‍💼 Administrateur
+
+L'administrateur peut :
+
+- Se connecter à son espace administrateur.
+- Gérer les types de congés.
+- Gérer les soldes de congés.
+- Consulter les demandes.
+- Gérer les demandes des employés.
+
+---
+
+## ⚙️ Fonctionnalités
+
+### 🔐 Authentification
+
+- Inscription
+- Connexion
+- Déconnexion
+- Authentification avec Laravel Sanctum
+- Gestion des rôles
+- Protection des routes API
+
+### 📋 Gestion des types de congés
+
+- Afficher les types de congés
+- Ajouter un type de congé
+- Modifier un type de congé
+- Supprimer un type de congé
+- Définir une durée maximale
+
+### 💳 Gestion des soldes
+
+- Consulter les utilisateurs
+- Ajouter un solde
+- Associer un solde à un type de congé
+- Définir le nombre de jours disponibles
+
+### 📝 Gestion des demandes de congé
+
+- Créer une demande
+- Sélectionner un type de congé
+- Choisir une date de début
+- Choisir une date de fin
+- Choisir le type de journée
+- Ajouter un motif
+- Ajouter un justificatif
+- Consulter les demandes
+- Suivre le statut de la demande
+
+---
+
+## 🛠️ Technologies utilisées
+
+### Frontend
+
+- React.js
+- JavaScript
+- Vite
+- Axios
+- React Router
+- CSS
+
+### Backend
+
+- PHP
+- Laravel
+- Laravel Sanctum
+- API REST
+
+### Base de données
+
+- MySQL
+
+### Outils
+
+- Visual Studio Code
+- Git
+- GitHub
+- Postman
+- Docker
+- XAMPP
+
+---
+
+## 🏗️ Architecture du projet
+
+Le projet est composé de deux parties principales :
+
+```text
+ENAA Leave
+│
+├── backend/
+│   └── Laravel API
+│
+└── frontend/
+    └── React Application
