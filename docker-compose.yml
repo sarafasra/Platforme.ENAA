@@ -1,0 +1,27 @@
+services:
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: enaa-leave-backend
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./backend:/var/www
+    env_file:
+      - ./backend/.env
+    environment:
+      DB_HOST: host.docker.internal
+      DB_PORT: 3308
+    command: php artisan serve --host=0.0.0.0 --port=8000
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: enaa-leave-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
