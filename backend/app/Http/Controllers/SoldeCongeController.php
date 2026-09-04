@@ -19,13 +19,13 @@ class SoldeCongeController extends Controller
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'type_conge_id' => 'required|exists:type_conges,id',
-            'solde' => 'required|numeric|min:0',
+            'jours_total' => 'required|numeric|min:0',
         ]);
 
         $soldeConge = SoldeConge::create([
             'user_id' => $request->user_id,
             'type_conge_id' => $request->type_conge_id,
-            'solde' => $request->solde,
+            'jours_total' => $request->jours_total,
         ]);
 
         return response()->json([
@@ -46,13 +46,13 @@ class SoldeCongeController extends Controller
         $request->validate([
             'user_id' => 'sometimes|required|exists:users,id',
             'type_conge_id' => 'sometimes|required|exists:type_conges,id',
-            'solde' => 'sometimes|required|numeric|min:0',
+            'jours_total' => 'sometimes|required|numeric|min:0',
         ]);
 
         $soldeConge->update($request->only([
             'user_id',
             'type_conge_id',
-            'solde',
+            'jours_total',
         ]));
 
         return response()->json([
